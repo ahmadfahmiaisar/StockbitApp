@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface CustomerService {
 
-    @GET("data/top/totaltoptiervolfull?limit=10&tsym=USD")
+    @GET("data/top/totaltoptiervolfull?limit=20&tsym=USD")
     suspend fun getTotalTopTierVolume(): Response<TotalTopTierVolumeDto>
 }
