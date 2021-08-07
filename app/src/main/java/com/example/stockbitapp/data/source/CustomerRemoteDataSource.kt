@@ -12,8 +12,8 @@ class CustomerRemoteDataSource @Inject constructor(
     private val customerService: CustomerService
 ) {
 
-    suspend fun getTotalTopTierVolume(): Either<Exception, TotalTopTierVolumeDto> {
-        val response = apiClient.safeApiCall { customerService.getTotalTopTierVolume() }
+    suspend fun getTotalTopTierVolume(page: Int, limit: Int): Either<Exception, TotalTopTierVolumeDto> {
+        val response = apiClient.safeApiCall { customerService.getTotalTopTierVolume(page, limit) }
         return when (response) {
             is ApiResponse.Success -> Either.Success(response.data)
             is ApiResponse.Failure -> Either.Failure(response.cause)

@@ -11,8 +11,11 @@ class CustomerRepositoryImpl @Inject constructor(
     private val remoteDataSource: CustomerRemoteDataSource,
     private val totalTopTierVolumeMapper: TotalTopTierVolumeMapper
 ) : CustomerRepository {
-    override suspend fun getTotalTopTierVolume(): Either<Exception, List<TotalTopTierVolume>> {
-        val apiResult = remoteDataSource.getTotalTopTierVolume()
+    override suspend fun getTotalTopTierVolume(
+        page: Int,
+        limit: Int
+    ): Either<Exception, List<TotalTopTierVolume>> {
+        val apiResult = remoteDataSource.getTotalTopTierVolume(page, limit)
         return when (apiResult) {
             is Either.Failure -> Either.Failure(apiResult.cause)
             is Either.Success -> Either.Success(totalTopTierVolumeMapper.map(apiResult.data))

@@ -2,15 +2,16 @@ package com.example.stockbitapp.domain.usecase
 
 import com.example.base.abstraction.UseCase
 import com.example.base.state.Either
+import com.example.stockbitapp.domain.entity.TotalTopTierParams
 import com.example.stockbitapp.domain.entity.TotalTopTierVolume
 import com.example.stockbitapp.domain.entity.TotalTopTierVolumeUiModel
 import com.example.stockbitapp.domain.repository.CustomerRepository
 import javax.inject.Inject
 
 class GetTotalTopTierVolumeUseCase @Inject constructor(private val repository: CustomerRepository) :
-    UseCase<UseCase.None, Either<Exception, List<TotalTopTierVolumeUiModel>>> {
-    override suspend fun invoke(params: UseCase.None): Either<Exception, List<TotalTopTierVolumeUiModel>> {
-        return handleData(repository.getTotalTopTierVolume())
+    UseCase<TotalTopTierParams, Either<Exception, List<TotalTopTierVolumeUiModel>>> {
+    override suspend fun invoke(params: TotalTopTierParams): Either<Exception, List<TotalTopTierVolumeUiModel>> {
+        return handleData(repository.getTotalTopTierVolume(params.page, params.limit))
     }
 
     private fun handleData(result: Either<Exception, List<TotalTopTierVolume>>): Either<Exception, List<TotalTopTierVolumeUiModel>> {

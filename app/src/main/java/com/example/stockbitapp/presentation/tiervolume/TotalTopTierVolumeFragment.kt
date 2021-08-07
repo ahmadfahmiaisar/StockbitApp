@@ -9,8 +9,10 @@ import com.example.base.abstraction.BaseFragment
 import com.example.base.extension.gone
 import com.example.base.extension.visible
 import com.example.base.state.ViewState
+import com.example.base.util.EndlessRecyclerOnScrollListener
 import com.example.base.util.RecyclerviewDividerItemDecoration
 import com.example.stockbitapp.databinding.FragmentTotalTopTierVolumeBinding
+import com.example.stockbitapp.domain.entity.TotalTopTierVolumeUiModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,12 +24,15 @@ class TotalTopTierVolumeFragment :
         get() = TotalTopTierVolumeViewModel::class.java
 
     private val adapter by lazy { TotalTopTierVolumeAdapter(emptyList()) }
+    private var page = 1
+    private var limit = 20
+    private var totalTiers = mutableListOf<TotalTopTierVolumeUiModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         observeTotalTopTierVolume()
-        vm.getTotalTopTierVolume()
+        vm.getTotalTopTierVolume(page, limit)
         initRecycleView()
     }
 
@@ -39,7 +44,8 @@ class TotalTopTierVolumeFragment :
                 }
                 is ViewState.Success -> {
                     binding.progressBar.gone()
-                    adapter.refreshData(it.data)
+                    totalTiers.addAll(it.data)
+                    adapter.refreshData(totalTiers)
                 }
                 is ViewState.Error -> {
                     binding.progressBar.gone()
@@ -53,5 +59,13 @@ class TotalTopTierVolumeFragment :
         binding.recycleView.layoutManager = layoutManager
         binding.recycleView.addItemDecoration(RecyclerviewDividerItemDecoration(requireActivity()))
         binding.recycleView.adapter = adapter
+
+        binding.recycleView.addOnScrollListener(object :
+            EndlessRecyclerOnScrollListener(layoutManager) {
+            override fun onLoadMore(current_page: Int) {
+                vm.getTotalTopTierVolume(current_page, limit)
+            }
+
+        })
     }
 }

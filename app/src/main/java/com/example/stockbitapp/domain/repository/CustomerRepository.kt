@@ -5,5 +5,5 @@ import com.example.stockbitapp.domain.entity.TotalTopTierVolume
 
 interface CustomerRepository {
 
-    suspend fun getTotalTopTierVolume(): Either<Exception, List<TotalTopTierVolume>>
+    suspend fun getTotalTopTierVolume(page: Int, limit: Int): Either<Exception, List<TotalTopTierVolume>>
 }
