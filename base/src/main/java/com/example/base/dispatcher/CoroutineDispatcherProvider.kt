@@ -1,9 +1,8 @@
 package com.example.base.dispatcher
 
-import com.example.base.dispatcher.DispatcherProvider
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import javax.inject.Inject
 
 class CoroutineDispatcherProvider @Inject constructor() : DispatcherProvider {
     override val ui: CoroutineDispatcher
